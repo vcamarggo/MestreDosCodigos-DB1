@@ -10,6 +10,7 @@ import src.service.Repository;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Created by vinicius.camargo on 28/06/2018
@@ -52,7 +53,12 @@ public class ClientGithubController {
         System.err.println("Houve um erro desconhecido no programa. Tente novamente mais tarde.");
     }
 
+    //  Printa a lista de repositorios que sao Fork de outros repositorios
     private void onSucess(List<Repository> repositories) {
-        repositories.forEach(System.out::println);
+        repositories.forEach(repository -> {
+            if (repository.isAFork()) {
+                System.out.println(repository);
+            }
+        });
     }
 }

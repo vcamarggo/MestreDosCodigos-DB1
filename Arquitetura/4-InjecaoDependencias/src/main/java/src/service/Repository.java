@@ -16,8 +16,8 @@ public class Repository {
     @SerializedName("url")
     private String url;
 
-    @SerializedName("private")
-    private Boolean isPrivate;
+    @SerializedName("fork")
+    private Boolean isAFork;
 
     @Override
     public String toString() {
@@ -25,7 +25,11 @@ public class Repository {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
-                ", isPrivate=" + isPrivate +
+                ", isAFork=" + isAFork +
                 '}';
+    }
+
+    public Boolean isAFork() {
+        return isAFork;
     }
 }
