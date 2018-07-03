@@ -17,7 +17,7 @@ public class Account extends ResourceSupport {
 
 
     private static final String DEPRECATION_TIME = "None";
-    private static final String EN_US = "en-US";
+    private static final String EN_US = "en_US";
 
     public Manager manager;
     public int id;
