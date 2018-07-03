@@ -3,6 +3,7 @@ package src.client;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import src.Application;
+import src.cache.CacheController;
 import src.service.IGithubService;
 import src.service.Repository;
 
@@ -20,23 +21,35 @@ public class ClientGithubController {
     @Inject
     IGithubService githubService;
 
+    @Inject
+    CacheController cacheController;
+
     ClientGithubController() {
         Application.getComponent().inject(this);
     }
 
     public void getAllRepositories() {
-        disposable.add(githubService.getAll().observeOn(Schedulers.io()).subscribe(this::onSucess, this::onError));
+        if (cacheController.isCacheValid()) {
+            System.out.println("CACHE USED");
+            onSucess(cacheController.getRepositoriesFromCache());
+        } else {
+            System.out.println("SERVICE USED");
+            disposable.add(githubService.getAll().observeOn(Schedulers.io()).subscribe(repositories -> {
+                cacheController.updateCache(repositories);
+                onSucess(repositories);
+            }, this::onError));
+        }
     }
 
     // Tratamento para quando houver algum tipo de erro de conexao, permite ao cliente tentar novamente
     private void onError(Throwable throwable) {
         if (throwable instanceof retrofit2.HttpException) {
-            System.out.println("Ha um problema com sua conexao. Deseja tentar novamente? (S)im/(N)ao");
+            System.err.println("Ha um problema com sua conexao. Deseja tentar novamente? (S)im/(N)ao");
             if (new Scanner(System.in).next().charAt(0) == 'S') {
                 getAllRepositories();
             }
         }
-        System.out.println("Houve um erro desconhecido no programa. Tente novamente mais tarde.");
+        System.err.println("Houve um erro desconhecido no programa. Tente novamente mais tarde.");
     }
 
     private void onSucess(List<Repository> repositories) {

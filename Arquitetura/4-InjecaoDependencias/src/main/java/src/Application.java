@@ -1,5 +1,6 @@
 package src;
 
+import src.cache.CacheModule;
 import src.client.ClientCurrencyRateController;
 import src.client.ClientGithubController;
 import src.client.ClientModule;
@@ -29,7 +30,9 @@ public class Application {
         getComponent().inject(this);
 
         //Requisicao feita em uma thread IO
-        clientGithubController.getAllRepositories();
+        for (int i = 0; i < 4; i++) {
+            clientGithubController.getAllRepositories();
+        }
 
         //Requisicao feita em outra thread IO
         clientCurrencyRateController.getCurrencyRate();
@@ -40,6 +43,7 @@ public class Application {
         component = DaggerDepsComponent.builder()
                 .webModule(new WebModule())
                 .clientModule(new ClientModule())
+                .cacheModule(new CacheModule())
                 .build();
     }
 
