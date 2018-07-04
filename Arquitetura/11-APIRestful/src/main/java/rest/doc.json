@@ -1,0 +1,50 @@
+{
+  "links": [
+    {
+      "name": "Account",
+      "description": "Bank account with an amount of money and a manager",
+      "url": "localhost:8080/account/",
+      "actions": [
+        {
+          "GET": {
+            "path": "optional-int"
+          },
+          "POST": {
+            "amount": "double",
+            "manager": {
+              "id": "int",
+              "name": "string",
+              "email": "string",
+              "birthdate": "Date"
+            }
+          },
+          "PUT": {
+            "id": "int",
+            "amount": "double",
+            "manager": {
+              "id": "int",
+              "name": "string",
+              "email": "string",
+              "birthdate": "Date"
+            }
+          },
+          "DELETE": {
+            "path": "int"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Manager",
+      "description": "Manager to manage bank accounts",
+      "url": "localhost:8080/manager/",
+      "actions": [
+        {
+          "GET": {
+            "path": "optional-int"
+          }
+        }
+      ]
+    }
+  ]
+}

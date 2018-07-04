@@ -10,7 +10,6 @@ import java.util.List;
  * Classe de cache para manter um cache local de repositorios
  */
 public class CacheController {
-    private final long CACHE_LIFE2 = 30000;
     private final long CACHE_LIFE = 3000;
     private long lastCacheSaved = 0;
     private List<Repository> repositories;
