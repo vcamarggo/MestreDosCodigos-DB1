@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "c7a39039-9adb-452e-ba86-280dc9a2fe75",
+		"name": "Mestre dos Códigos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Accounts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/account/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts",
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/account/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manager",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/manager/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"manager",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/account/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/account/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 350,\n    \"manager\":{\n    \t\"id\": 1,\n        \"name\": \"Mary Josh\",\n        \"email\": \"josh.mary@mybank.com\",\n        \"birthdate\": \"1967-06-30T00:00:00.000+0000\"\n    }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/account/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":3,\n    \"amount\": 8250,\n     \"manager\":{\n    \t\"id\": 1,\n        \"name\": \"Mary Josh\",\n        \"email\": \"josh.mary@mybank.com\",\n        \"birthdate\": \"1967-06-30T00:00:00.000+0000\"\n    }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/account/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
