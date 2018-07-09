@@ -10,9 +10,6 @@ public class Repository {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("description")
-    private String description;
-
     @SerializedName("url")
     private String url;
 
@@ -23,7 +20,6 @@ public class Repository {
     public String toString() {
         return "Repository{" +
                 "name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
                 ", isAFork=" + isAFork +
                 '}';
