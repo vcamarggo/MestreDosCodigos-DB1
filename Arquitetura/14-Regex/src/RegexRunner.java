@@ -21,11 +21,22 @@ public class RegexRunner {
 
     public static void main(String[] args) {
 
+		System.out.println("Lorem ipsum: "+LOREM_IPSUM);
+		System.out.println();
+		System.out.println("CPF: "+CPF);
+		System.out.println();
+		System.out.println("CPNJ: "+CNPJ);
+		System.out.println();
+		System.out.println("Date: "+DATE);
+		System.out.println();
+		System.out.println("Currency BRL: "+CURRENCY_BRL);
+		System.out.println();
+	
         Arrays.asList(new CpfRegex(), new CnpjRegex(), new DateRegex(), new CurrencyRegex())
-                .forEach(RegexRunner::testRegexes);
+                .forEach(RegexRunner::testRegex);
     }
 
-    private static void testRegexes(IRegexProvider regex) {
+    private static void testRegex(IRegexProvider regex) {
         Pattern r = Pattern.compile(regex.getRegex());
         Matcher matcher = r.matcher(LOREM_IPSUM);
         System.out.println("Lorem Ipsum contains " + regex.getName() + "? " + matcher.find());

@@ -23,6 +23,8 @@
                             <version>LATEST</version>
                         </path>
                     </annotationProcessorPaths>
+					<mainClass>src.Runner</mainClass>
+					<cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
         </plugins>

@@ -36,6 +36,7 @@ public class Application {
 
         //Requisicao feita em outra thread IO
         clientCurrencyRateController.getCurrencyRate();
+
     }
 
     // Inicializa a injecao de dependencia com modulo web e modulo cliente

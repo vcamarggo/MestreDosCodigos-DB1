@@ -26,7 +26,7 @@ public class AccountController {
 
     private final String BASE_ACCOUNT_URL = "/account/";
 
-    // Retorna o JSON da conta ou um 404 not found
+    // Retorna o JSON documentando todas as opcoes possiveis para a API
     @RequestMapping(value = BASE_ACCOUNT_URL, method = OPTIONS)
     public ResponseEntity getOptions() {
         HttpHeaders headers = new HttpHeaders();
@@ -34,14 +34,12 @@ public class AccountController {
         headers.setAllow(allowedMethods);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String in = null;
         try {
-            in = new String(Files.readAllBytes(Paths.get("./src/main/java/rest/doc.json")));
+            String in = new String(Files.readAllBytes(Paths.get("./src/main/java/rest/doc.json")));
+            return ResponseEntity.ok().headers(headers).body(in);
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.status(500).build();
         }
-
-        return ResponseEntity.ok().headers(headers).body(in);
     }
 
 
