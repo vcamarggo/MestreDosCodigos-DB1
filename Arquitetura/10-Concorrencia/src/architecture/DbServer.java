@@ -6,10 +6,12 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by vinicius.camargo on 10/07/2018
@@ -18,7 +20,7 @@ public class DbServer extends UnicastRemoteObject implements Server {
 
     private HashMap<Integer, Account> accounts = new HashMap<>();
     private HashMap<Integer, Client> lockedAccounts = new HashMap<>();
-    private Queue<Client> lockQueue = new LinkedList<>();
+    private LinkedList<Client> lockQueue = new LinkedList<>();
 
 
     private DbServer() throws RemoteException {
@@ -33,10 +35,9 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     private void initializeDatabase() throws RemoteException {
-        for (int id = 1; id < 5; id++) {
-            accounts.put(id, new Account(1000));
-        }
-        printAccounts();
+        List<Integer> elements = Arrays.asList(1, 2, 3, 4, 5);
+        elements.forEach(id -> accounts.put(id, new Account()));
+        printAccounts(elements);
     }
 
     @Override
@@ -55,8 +56,12 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void printAccounts() throws RemoteException {
-        accounts.forEach((id, account) -> System.out.println("Conta: " + id + " possui saldo de R$" + account.printBalance()));
+    public void printAccounts(List ids) throws RemoteException {
+        accounts.forEach((id, account) -> {
+            if (ids.contains(id)) {
+                System.out.println("Conta: " + id + " possui saldo de R$" + account.printBalance());
+            }
+        });
         System.out.println();
     }
 
@@ -70,14 +75,22 @@ public class DbServer extends UnicastRemoteObject implements Server {
     public void transferEnded(int from, int to, Client client) throws RemoteException, InterruptedException {
         lockedAccounts.remove(from, client);
         lockedAccounts.remove(to, client);
-        if (!lockQueue.isEmpty() && !lockedAccounts.containsValue(lockQueue.peek())) {
-            lockQueue.poll().doOperation();
+        if (!lockQueue.isEmpty()) {
+            lockQueue.stream().filter(cli -> lockedAccounts.containsValue(cli)).findFirst().ifPresent(cli -> {
+                try {
+                    lockQueue.remove(cli);
+                    cli.doOperation();
+                } catch (InterruptedException | RemoteException e) {
+                    e.printStackTrace();
+                }
+            });
+//            lockQueue.poll().doOperation();
         }
     }
 
     @Override
     public void wantLock(int from, int to, Client client) throws RemoteException, InterruptedException {
-        if (lockQueue.isEmpty() && (lockedAccounts.get(from) == null && lockedAccounts.get(from) == null)) {
+        if ((lockedAccounts.get(from) == null && lockedAccounts.get(from) == null) || lockQueue.isEmpty()) {
             client.doOperation();
         } else {
             lockQueue.offer(client);

@@ -13,8 +13,8 @@ import java.util.Random;
 abstract class Client implements Serializable {
     final int PID;
     Server server;
-    final int from;
-    final int to;
+    final int senderAccount;
+    final int recipientAccount;
 
     abstract void doOperation() throws InterruptedException, RemoteException;
 
@@ -31,12 +31,12 @@ abstract class Client implements Serializable {
         return Objects.hash(PID);
     }
 
-    public Client(int from, int to) throws RemoteException, InterruptedException, NotBoundException {
-        this.from = from;
-        this.to = to;
+    public Client(int senderAccount, int recipientAccount) throws RemoteException, InterruptedException, NotBoundException {
+        this.senderAccount = senderAccount;
+        this.recipientAccount = recipientAccount;
         this.PID = new Random().nextInt(999);
         System.out.println("PID gerado foi: " + PID);
         server = (Server) LocateRegistry.getRegistry().lookup("DbServer");
-        server.wantLock(from, to, this);
+        server.wantLock(senderAccount, recipientAccount, this);
     }
 }

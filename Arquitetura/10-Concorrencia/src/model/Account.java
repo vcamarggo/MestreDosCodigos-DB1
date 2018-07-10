@@ -6,8 +6,8 @@ package model;
 public class Account {
     private Integer balance;
 
-    public Account(Integer balance) {
-        this.balance = balance;
+    public Account() {
+        balance = 1000;
     }
 
     public void withdraw(int amount) {
