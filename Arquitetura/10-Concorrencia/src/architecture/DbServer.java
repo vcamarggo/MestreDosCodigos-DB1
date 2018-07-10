@@ -35,7 +35,7 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     private void initializeDatabase() throws RemoteException {
-        List<Integer> elements = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> elements = Arrays.asList(1, 2, 3, 4);
         elements.forEach(id -> accounts.put(id, new Account()));
         printAccounts(elements);
     }
@@ -75,25 +75,27 @@ public class DbServer extends UnicastRemoteObject implements Server {
     public void transferEnded(int from, int to, Client client) throws RemoteException, InterruptedException {
         lockedAccounts.remove(from, client);
         lockedAccounts.remove(to, client);
+        accounts.isEmpty();
         if (!lockQueue.isEmpty()) {
-            lockQueue.stream().filter(cli -> lockedAccounts.containsValue(cli)).findFirst().ifPresent(cli -> {
-                try {
-                    lockQueue.remove(cli);
-                    cli.doOperation();
-                } catch (InterruptedException | RemoteException e) {
-                    e.printStackTrace();
+            lockQueue.forEach(cli -> {
+                if (!lockedAccounts.containsValue(cli) && lockedAccounts.get(cli.senderAccount) == null && lockedAccounts.get(cli.recipientAccount) == null) {
+                    try {
+                        lockQueue.remove(cli);
+                        cli.doOperation();
+                    } catch (InterruptedException | RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-//            lockQueue.poll().doOperation();
         }
     }
 
     @Override
     public void wantLock(int from, int to, Client client) throws RemoteException, InterruptedException {
-        if ((lockedAccounts.get(from) == null && lockedAccounts.get(from) == null) || lockQueue.isEmpty()) {
-            client.doOperation();
-        } else {
+        if (lockedAccounts.get(from) != null || lockedAccounts.get(to) != null) {
             lockQueue.offer(client);
+        } else {
+            client.doOperation();
         }
     }
 
