@@ -7,14 +7,19 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Queue;
 
 /**
  * Created by vinicius.camargo on 10/07/2018
  */
 public class DbServer extends UnicastRemoteObject implements Server {
 
-    private static HashMap<Integer, Account> accounts = new HashMap<>();
-    private static HashMap<Integer, Integer> lockedAccounts = new HashMap<>();
+    private HashMap<Integer, Account> accounts = new HashMap<>();
+    private HashMap<Integer, Client> lockedAccounts = new HashMap<>();
+    private Queue<Client> lockQueue = new LinkedList<>();
+
 
     private DbServer() throws RemoteException {
         super();
@@ -28,7 +33,7 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     private void initializeDatabase() throws RemoteException {
-        for (int id = 1; id < 3; id++) {
+        for (int id = 1; id < 5; id++) {
             accounts.put(id, new Account(1000));
         }
         printAccounts();
@@ -56,19 +61,27 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void willTransfer(int from, int to, int ownerPID) throws RemoteException {
-        lockedAccounts.put(from, ownerPID);
-        lockedAccounts.put(to, ownerPID);
+    public void willTransfer(int from, int to, Client client) throws RemoteException {
+        lockedAccounts.put(from, client);
+        lockedAccounts.put(to, client);
     }
 
     @Override
-    public void transferEnded(int from, int to, int ownerPID) throws RemoteException {
-        lockedAccounts.remove(from, ownerPID);
-        lockedAccounts.remove(to, ownerPID);
+    public void transferEnded(int from, int to, Client client) throws RemoteException, InterruptedException {
+        lockedAccounts.remove(from, client);
+        lockedAccounts.remove(to, client);
+        if (!lockQueue.isEmpty() && !lockedAccounts.containsValue(lockQueue.peek())) {
+            lockQueue.poll().doOperation();
+        }
     }
 
     @Override
-    public boolean canTransfer(int from, int to) throws RemoteException {
-        return lockedAccounts.get(from) == null && lockedAccounts.get(from) == null;
+    public void wantLock(int from, int to, Client client) throws RemoteException, InterruptedException {
+        if (lockQueue.isEmpty() && (lockedAccounts.get(from) == null && lockedAccounts.get(from) == null)) {
+            client.doOperation();
+        } else {
+            lockQueue.offer(client);
+        }
     }
+
 }

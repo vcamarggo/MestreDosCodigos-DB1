@@ -1,33 +1,42 @@
 package architecture;
 
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * Created by vinicius.camargo on 10/07/2018
  */
-public class Client {
+abstract class Client implements Serializable {
+    final int PID;
+    Server server;
+    final int from;
+    final int to;
 
-    private static int PID = 147852369;
+    abstract void doOperation() throws InterruptedException, RemoteException;
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
-        Registry registry = LocateRegistry.getRegistry();
-        Server server = (Server) registry.lookup("DbServer");
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return PID == client.PID;
+    }
 
-        final int from = 1;
-        final int to = 2;
-        while (!server.canTransfer(from, to)) {
-            System.out.println("Desculpe, o recurso desejado ainda encontra-se ocupado");
-            Thread.sleep(3000);
-        }
-        server.willTransfer(from, to, PID);
-        server.applyTax(to, 0.10);
-        server.withdraw(from, 400);
-        server.deposit(to, 400);
-        server.printAccounts();
-        server.transferEnded(from, to, PID);
+    @Override
+    public int hashCode() {
+        return Objects.hash(PID);
+    }
 
+    public Client(int from, int to) throws RemoteException, InterruptedException, NotBoundException {
+        this.from = from;
+        this.to = to;
+        this.PID = new Random().nextInt(999);
+        System.out.println("PID gerado foi: " + PID);
+        server = (Server) LocateRegistry.getRegistry().lookup("DbServer");
+        server.wantLock(from, to, this);
     }
 }

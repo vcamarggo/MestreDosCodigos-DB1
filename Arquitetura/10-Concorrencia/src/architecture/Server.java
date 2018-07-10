@@ -12,9 +12,10 @@ public interface Server extends Remote {
 
     void printAccounts() throws RemoteException;
 
-    void willTransfer(int from, int to, int ownerPID) throws RemoteException;
+    void willTransfer(int from, int to, Client client) throws RemoteException;
 
-    void transferEnded(int from, int to, int ownerPID) throws RemoteException;
+    void transferEnded(int from, int to, Client client) throws RemoteException, InterruptedException;
 
-    boolean canTransfer(int from, int to) throws RemoteException;
+    void wantLock(int from, int to, Client client) throws RemoteException, InterruptedException;
+
 }
