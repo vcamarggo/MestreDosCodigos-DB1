@@ -1,4 +1,4 @@
 #### Programação funcional
 
 - Execute o script run.sh
-- A saída mostra um cálculo do fatorial apenas considerando os números pares entre (0,10]. 
+- O arquivo Java foi construído apenas para servir de base a corretude do algoritmo desenvolvido em Racket (Paradigma Funcional). 
