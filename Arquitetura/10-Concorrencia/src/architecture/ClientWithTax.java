@@ -24,7 +24,7 @@ public class ClientWithTax extends Client {
         server.withdraw(senderAccount, 350);
         server.deposit(recipientAccount, 350);
         System.out.println("PID do cliente que realizou a operacao: " + PID);
-        System.out.println("Aplicou: 10% de taxa em " + senderAccount);
+        System.out.println("Aplicou: 10% de taxa em " + recipientAccount);
         System.out.println("Transferiu: 350 de " + senderAccount + " para " + recipientAccount);
         server.printAccounts(Arrays.asList(recipientAccount, senderAccount));// Nao printa tudo pois teria que ter pedido lock de todas as variaveis
         server.transferEnded(senderAccount, recipientAccount, this);
