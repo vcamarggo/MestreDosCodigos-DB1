@@ -20,10 +20,12 @@ public class ClientWithTax extends Client {
 
     public void doOperation() throws InterruptedException, RemoteException {
         server.willTransfer(senderAccount, recipientAccount, this);
-        server.applyTax(recipientAccount, 0.00);
-        server.withdraw(senderAccount, 0);
-        server.deposit(recipientAccount, 0);
-        System.out.println("PID do cliente que realizou a operação: " + PID);
+        server.applyTax(recipientAccount, 0.10); // Aplica uma taxa de 10% no receptor antes da transferência
+        server.withdraw(senderAccount, 350);
+        server.deposit(recipientAccount, 350);
+        System.out.println("PID do cliente que realizou a operacao: " + PID);
+        System.out.println("Aplicou: 10% de taxa em " + senderAccount);
+        System.out.println("Transferiu: 350 de " + senderAccount + " para " + recipientAccount);
         server.printAccounts(Arrays.asList(recipientAccount, senderAccount));// Nao printa tudo pois teria que ter pedido lock de todas as variaveis
         server.transferEnded(senderAccount, recipientAccount, this);
     }

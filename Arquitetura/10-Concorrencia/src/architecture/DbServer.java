@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by vinicius.camargo on 10/07/2018
@@ -66,16 +64,15 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void willTransfer(int from, int to, Client client) throws RemoteException {
-        lockedAccounts.put(from, client);
-        lockedAccounts.put(to, client);
+    public void willTransfer(int senderAccount, int receiverAccount, Client client) throws RemoteException {
+        lockedAccounts.put(senderAccount, client);
+        lockedAccounts.put(receiverAccount, client);
     }
 
     @Override
-    public void transferEnded(int from, int to, Client client) throws RemoteException, InterruptedException {
-        lockedAccounts.remove(from, client);
-        lockedAccounts.remove(to, client);
-        accounts.isEmpty();
+    public void transferEnded(int senderAccount, int receiverAccount, Client client) throws RemoteException, InterruptedException {
+        lockedAccounts.remove(senderAccount, client);
+        lockedAccounts.remove(receiverAccount, client);
         if (!lockQueue.isEmpty()) {
             lockQueue.forEach(cli -> {
                 if (!lockedAccounts.containsValue(cli) && lockedAccounts.get(cli.senderAccount) == null && lockedAccounts.get(cli.recipientAccount) == null) {
@@ -91,8 +88,8 @@ public class DbServer extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void wantLock(int from, int to, Client client) throws RemoteException, InterruptedException {
-        if (lockedAccounts.get(from) != null || lockedAccounts.get(to) != null) {
+    public void wantLock(int senderAccount, int receiverAccount, Client client) throws RemoteException, InterruptedException {
+        if (lockedAccounts.get(senderAccount) != null || lockedAccounts.get(receiverAccount) != null) {
             lockQueue.offer(client);
         } else {
             client.doOperation();
