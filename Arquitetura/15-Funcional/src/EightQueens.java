@@ -11,9 +11,8 @@ public class EightQueens {
     private static boolean APENAS_UMA_SOLUCAO = false;
 
     public static void main(String[] args) {
-        System.out.println("Insira qual tamanho n, que seu tabuleiro n x n terá: ");
-//        tamanho = new Scanner(System.in).nextInt();
-        tamanho = 4;
+        System.out.println("Insira qual tamanho n seu tabuleiro n x n tera: ");
+        tamanho = new Scanner(System.in).nextInt();
         int tentativas = 0;
         boolean visitouTodosFilhos = false;
 
@@ -49,7 +48,6 @@ public class EightQueens {
         System.out.println("Solucao: " + solucao);
     }
 
-    //Função pura
     private static boolean tentouTodasLinhas(final int tryCounter) {
         return tryCounter == tamanho;
     }

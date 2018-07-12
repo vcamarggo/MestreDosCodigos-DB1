@@ -1,4 +1,5 @@
 javac src/*.java
-java -classpath src EvenFatorial
+java -classpath src EightQueens
+read
 read
 rm src/*.class
