@@ -1,6 +1,7 @@
 #lang racket
 (require srfi/13)
 
+
 ;; imutabilidade em racket todo dado eh imutavel, ja que as funcoes nao alteram seu valor original, apenas retornam um valor novo,
 ;; funções puras em racket toda funcao nao-estocastica eh pura, visto que dado uma entrada, sempre retorna a mesma saida.
 ;; Vale notar que esta aplicacao nao contem nenhuma funcao estocastica, logo, todas as funcoes sao puras.
@@ -36,7 +37,7 @@
        (diagonal-segura-body? (rest lista) nr (add1 acc))]))
 (diagonal-segura-body? lista nr 0)))
 
-;; Lista Numero -> Lógico
+;; Lista numero -> Lógico
 ;; ---------------------
 ;; implementa a verificacao geral se pode inserir um elemento no tabuleiro
 (define (seguro-inserir? lista nr)
@@ -47,6 +48,7 @@
 ;; encontra o index do primeiro que ainda pode aumentar
 (define (ultimo-visitado-idx lista tamanho)
   (cond
+    [(empty? lista) 0]
     [(< (last lista) (- tamanho 1)) (index-of lista (last lista))]
     [else (ultimo-visitado-idx (take lista (-(length lista) 1)) tamanho)]))
 
@@ -55,16 +57,26 @@
 ;; encontra o valor do primeiro que ainda pode aumentar
 (define (ultimo-visitado-value lista tamanho)
   (cond
+    [(empty? lista) tamanho]
     [(< (last lista) (- tamanho 1)) (last lista)]
     [else (ultimo-visitado-value (take lista (-(length lista) 1)) tamanho)]))
 
+;; Lista numero numero -> Numero
+;; ---------------------
+;; verifica se ja foram testadas todas as possibilidades
+(define (testou-todas-possibilidades? lista nr tamanho)
+  (cond
+    [(and (empty? lista) (>= nr tamanho)) #t]
+    [else #f]))
+
 ;; Numero -> Lista
 ;; ---------------------
-;; resolve o N-rainhas resultando em apenas uma solucao, mesmo havendo mais.
+;; resolve o N-rainhas resultando em todas as solucoes possiveis
 (define (n-rainhas tamanho)
   (define (n-rainhas-body lista nr tamanho)
   (cond
-    [(equal?(length lista) tamanho) (map add1 lista)]
+    [(testou-todas-possibilidades? lista nr tamanho) lista]
+    [(equal?(length lista) tamanho) (cons (map add1 lista) (n-rainhas-body (take lista (ultimo-visitado-idx lista tamanho)) (add1 (ultimo-visitado-value lista tamanho)) tamanho))]
     [(seguro-inserir? lista nr) (n-rainhas-body (append lista (list nr)) 0 tamanho)]
     [(< nr (- tamanho 1)) (n-rainhas-body lista (add1 nr) tamanho)]
     [(equal? nr (- tamanho 1)) (n-rainhas-body (take lista (ultimo-visitado-idx lista tamanho)) (add1 (ultimo-visitado-value lista tamanho)) tamanho)])
