@@ -3,11 +3,9 @@ package src.client;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import src.Application;
-import src.service.CurrencyRate;
 import src.service.ICurrencyRateService;
 
 import javax.inject.Inject;
-import java.util.Scanner;
 
 /**
  * Created by vinicius.camargo on 28/06/2018

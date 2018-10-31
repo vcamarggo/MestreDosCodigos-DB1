@@ -1,0 +1,6 @@
+./src/architecture/Client.java
+./src/architecture/ClientWithoutTax.java
+./src/architecture/ClientWithTax.java
+./src/architecture/DbServer.java
+./src/architecture/Server.java
+./src/model/Account.java

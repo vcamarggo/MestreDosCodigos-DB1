@@ -55,9 +55,9 @@ public class EstruturaDadosRunner {
     }
 
     /**
-     * Na insercao a estruturas sao avaliadas como segue:
+     * Na consulta a estruturas sao avaliadas como segue:
      * lista: ruim, pode consumir ate O(n) operacoes para achar um elemento na lista
-     * pilha: otima, pode consumir ate O(n) operacoes para achar um elemento, se comportando como uma lista
+     * pilha: ruim, pode consumir ate O(n) operacoes para achar um elemento, se comportando como uma lista
      * arvore: boa, consulta em tempo O(log n) com busca binaria
      **/
     private static void testPrintAll() {
@@ -75,7 +75,7 @@ public class EstruturaDadosRunner {
     }
 
     /**
-     * Na insercao a estruturas sao avaliadas como segue:
+     * Na remomcao a estruturas sao avaliadas como segue:
      * lista: ruim, pode consumir ate O(n) operacoes para achar um elemento na lista e então remove-lo
      * pilha: otima, consome O(1) pois sempre remove da primeira posicao usando pop
      * arvore: boa, remove em tempo O(log n) com busca binaria mais um pequeno tempo de reestruturacao da arvore

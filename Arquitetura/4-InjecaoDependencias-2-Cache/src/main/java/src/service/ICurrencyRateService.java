@@ -10,7 +10,7 @@ import retrofit2.http.GET;
  */
 public interface ICurrencyRateService {
 
-    @GET("https://exchangeratesapi.io/api/latest?base=BRL")
+    @GET("https://api.exchangeratesapi.io/latest?base=BRL")
     Single<CurrencyRate> getCurrencyRate();
 
 }
