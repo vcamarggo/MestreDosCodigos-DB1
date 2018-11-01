@@ -2,8 +2,6 @@ import io.reactivex.BackpressureStrategy;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import java.util.Scanner;
-
 public class RunnerElastic {
     /**
      * Elástico: O sistema continua responsivo mesmo sob variações de demanda.
@@ -34,7 +32,6 @@ public class RunnerElastic {
                         System.out.println("Terminei");
                     }
                 });
-        new Scanner(System.in).next();
     }
 
 

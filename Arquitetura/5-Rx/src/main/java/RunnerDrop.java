@@ -2,8 +2,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.Scanner;
-
 /**
  * Created by vinicius.camargo on 31/10/2018
  */
@@ -29,7 +27,6 @@ public class RunnerDrop {
                         System.out::println,
                         //"mensagem" de sucesso de emissão total doOnComplete()
                         () -> System.out.println("Terminei")));
-        new Scanner(System.in).next();
     }
 
 }
