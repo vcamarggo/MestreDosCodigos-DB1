@@ -1,11 +1,7 @@
 package br.com.poc.otp.otp;
 
-import android.Manifest;
 import android.animation.Animator;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.widget.Button;
@@ -35,10 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static br.com.poc.otp.PreferencesHelper.ACCOUNT;
-import static br.com.poc.otp.PreferencesHelper.ACCOUNT_ID;
-import static br.com.poc.otp.PreferencesHelper.AGENCY;
 import static br.com.poc.otp.PreferencesHelper.HAS_TOKEN;
-import static br.com.poc.otp.PreferencesHelper.NAME;
 import static br.com.poc.otp.PreferencesHelper.SEED;
 
 public class GenerateOTPActivity extends AppCompatActivity {
@@ -72,7 +65,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
                     String base64Seed = encryptFile(String.valueOf(seed).getBytes());
                     WebModule
                             .create(IUserService.class)
-                            .sendSeed(new SeedBody(PreferencesHelper.getLongPreference(this, ACCOUNT_ID), base64Seed))
+                            .sendSeed(new SeedBody(PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT), base64Seed))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
@@ -92,13 +85,11 @@ public class GenerateOTPActivity extends AppCompatActivity {
 
     private void generatePassword() {
         String account = PreferencesHelper.getStringPreference(this, ACCOUNT);
-        String agency = PreferencesHelper.getStringPreference(this, AGENCY);
-        String name = PreferencesHelper.getStringPreference(this, NAME);
         try {
             if (PreferencesHelper.getBoolean(this, HAS_TOKEN)) {
 
                 Long seed = PreferencesHelper.getLongPreference(this, SEED);
-                TokenGenerator generator = new TokenGenerator(seed, agency, account, name);
+                TokenGenerator generator = new TokenGenerator(seed, account);
 
                 tvContent.setText(String.format(getString(R.string.token), generator.generate().getNextToken()));
 
@@ -159,7 +150,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
         super.onResume();
         WebModule
                 .create(IUserService.class)
-                .hasToken(PreferencesHelper.getLongPreference(this, ACCOUNT_ID))
+                .hasToken(PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {

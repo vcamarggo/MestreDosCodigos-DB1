@@ -14,8 +14,7 @@ import br.com.poc.otp.service.WebModule;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static br.com.poc.otp.PreferencesHelper.ACCOUNT_ID;
-import static br.com.poc.otp.PreferencesHelper.NAME;
+import static br.com.poc.otp.PreferencesHelper.ACCOUNT;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,25 +23,22 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final EditText etAgency = findViewById(R.id.et_agency);
         final EditText etAccount = findViewById(R.id.et_account);
         final EditText etPassword = findViewById(R.id.et_password);
         final Button btnLogin = findViewById(R.id.btn_login);
 
         btnLogin.setOnClickListener(v -> {
             String account = etAccount.getText().toString();
-            String agency = etAgency.getText().toString();
             String password = etPassword.getText().toString();
 
             WebModule
                     .create(IUserService.class)
-                    .doLogin(agency, account, password)
+                    .doLogin(account, password)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             loginResponse -> {
-                                PreferencesHelper.saveLongPreference(this, ACCOUNT_ID, loginResponse.getId());
-                                PreferencesHelper.saveStringPreference(this, NAME, loginResponse.getName());
+                                PreferencesHelper.saveStringPreference(this, ACCOUNT, account);
                                 startActivity(new Intent(this, GenerateOTPActivity.class));
                             },
                             throwable -> Toast.makeText(this, "HOUVE UM ERRO AO PROCESSAR SOLICITACAO", Toast.LENGTH_LONG).show());

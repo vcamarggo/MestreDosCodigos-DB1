@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface IUserService {
 
     @GET("http://localhost:8080/banking/acessar")
-    Single<LoginResponse> doLogin(@Query("account") String account, @Query("password") String password);
+    Single<TokenDto> doLogin(@Query("account") String account, @Query("password") String password);
 
     @GET("http://localhost:8080/banking/semente/existe-ativa")
     Completable hasToken(@Query("account") String accountId);
