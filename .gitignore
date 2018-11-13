@@ -60,3 +60,4 @@ settings.gradle
 TODO.txt
 Arquitetura/4-InjecaoDependencias-2-Cache/target/
 !Arquitetura/8-Autenticacao/OTP/*
+!Arquitetura/8-Autenticacao/JWT/*
