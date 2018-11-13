@@ -59,5 +59,4 @@ gradlew.bat
 settings.gradle
 TODO.txt
 Arquitetura/4-InjecaoDependencias-2-Cache/target/
-!Arquitetura/8-Autenticacao/
-!Arquitetura/8-Autenticacao/*
+!Arquitetura/8-Autenticacao/OTP/*
