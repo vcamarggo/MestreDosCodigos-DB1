@@ -21,9 +21,6 @@ public class CustomEditText extends TextInputEditText {
     private static final int X_DEFAULT_LEFT = 0;
     private static final int DRAWABLE_RIGHT_INDEX = 2;
 
-    private int emojiFilterIndex;
-    private Boolean emojisEnabled;
-
     public CustomEditText(Context context) {
         super(context);
         initComponent();
