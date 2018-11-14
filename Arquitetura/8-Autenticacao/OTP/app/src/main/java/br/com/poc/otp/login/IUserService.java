@@ -6,6 +6,7 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -18,9 +19,9 @@ public interface IUserService {
     Single<TokenDto> doLogin(@Body LoginDto loginDto);
 
     @GET("http://192.168.0.100:8080/banking/semente/existe-ativa")
-    Completable hasToken(@Query("account") String accountId);
+    Completable hasToken(@Header("Authorization") String authorization, @Query("account") String accountId);
 
     @POST("http://192.168.0.100:8080/banking/semente")
-    Completable sendSeed(@Body SeedBody seedBody);
+    Completable sendSeed(@Header("Authorization") String authorization, @Body SeedBody seedBody);
 
 }

@@ -66,7 +66,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
                     String base64Seed = encryptFile(String.valueOf(seed).getBytes());
                     WebModule
                             .create(IUserService.class)
-                            .sendSeed(new SeedBody(PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT), base64Seed))
+                            .sendSeed(PreferencesHelper.getStringPreference(this, PreferencesHelper.HEADER), new SeedBody(PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT), base64Seed))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
@@ -151,7 +151,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
         super.onResume();
         WebModule
                 .create(IUserService.class)
-                .hasToken(PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT))
+                .hasToken(PreferencesHelper.getStringPreference(this, PreferencesHelper.HEADER), PreferencesHelper.getStringPreference(this, PreferencesHelper.ACCOUNT))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {

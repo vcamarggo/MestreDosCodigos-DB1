@@ -3,6 +3,7 @@ package br.com.poc.otp.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import static br.com.poc.otp.PreferencesHelper.ACCOUNT;
+import static br.com.poc.otp.PreferencesHelper.HEADER;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,11 +35,12 @@ public class LoginActivity extends AppCompatActivity {
 
             WebModule
                     .create(IUserService.class)
-                    .doLogin(new LoginDto(account, password))
+                    .doLogin(new LoginDto(account, Base64.encodeToString(password.getBytes(), Base64.NO_WRAP)))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             loginResponse -> {
+                                PreferencesHelper.saveStringPreference(this, HEADER, loginResponse.getAuthorization());
                                 PreferencesHelper.saveStringPreference(this, ACCOUNT, account);
                                 startActivity(new Intent(this, GenerateOTPActivity.class));
                             },

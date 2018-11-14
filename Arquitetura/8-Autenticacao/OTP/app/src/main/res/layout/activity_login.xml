@@ -11,8 +11,8 @@
         android:id="@+id/til_account"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:theme="@style/TextInputLayoutWhite">
+        android:layout_centerHorizontal="true"
+        android:theme="@style/TextInputLayoutWhite"  android:layout_above="@id/til_password">
 
         <br.com.poc.otp.ui.CustomEditText
             android:id="@+id/et_account"
@@ -29,7 +29,7 @@
         android:id="@+id/til_password"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/til_account"
+        android:layout_above="@id/btn_login"
         android:layout_centerInParent="true"
         android:layout_marginTop="32dp"
         android:theme="@style/TextInputLayoutWhite" >
@@ -49,7 +49,6 @@
         android:id="@+id/btn_login"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/til_password"
         android:layout_centerInParent="true"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorAccent"

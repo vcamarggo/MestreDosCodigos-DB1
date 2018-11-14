@@ -12,6 +12,7 @@ public class PreferencesHelper {
     public static final String SEED = "seed";
     public static final String HAS_TOKEN = "has_token";
     public static final String ACCOUNT = "conta";
+    public static final String HEADER = "header";
 
     public static void saveStringPreference(Context context, String key, String value) {
         new EncryptedPreferences.Builder(context)
