@@ -7,8 +7,9 @@ public class SeedBody {
     private final String account;
     private final String seed;
 
-    public SeedBody(String account, String seed) {
+    SeedBody(String account, String seed) {
         this.account = account;
         this.seed = seed;
     }
 }
+

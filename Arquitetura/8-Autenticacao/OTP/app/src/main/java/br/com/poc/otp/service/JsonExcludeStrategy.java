@@ -3,7 +3,7 @@ package br.com.poc.otp.service;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 
-public class JsonExcludeStrategy implements ExclusionStrategy {
+class JsonExcludeStrategy implements ExclusionStrategy {
 
     @Override
     public boolean shouldSkipField(FieldAttributes f) {

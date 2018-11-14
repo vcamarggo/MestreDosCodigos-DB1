@@ -1,23 +1,26 @@
 package br.com.seguranca.jwtotp.configuration;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import br.com.seguranca.jwtotp.dto.JwtDTO;
 import com.google.gson.Gson;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public class TokenAuthenticationService {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+class TokenAuthenticationService {
 
     // EXPIRATION_TIME = 20 minutos
     private static final long EXPIRATION_TIME = 12_000_00;
@@ -25,7 +28,7 @@ public class TokenAuthenticationService {
     private static final String HEADER_STRING = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String ROLES = "roles";
-    public static final String ROLE_PREFIX = "ROLE_";
+    private static final String ROLE_PREFIX = "ROLE_";
 
     static void addAuthentication(HttpServletResponse response, Authentication authentication) throws IOException {
         String role = authentication.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElseThrow(IOException::new);

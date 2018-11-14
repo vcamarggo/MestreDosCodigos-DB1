@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -36,7 +37,7 @@ import static br.com.poc.otp.PreferencesHelper.SEED;
 
 public class GenerateOTPActivity extends AppCompatActivity {
 
-    private static final String symmetricSecret = "%?c=RmC4[N<J'_H:BkZ8uK9V/5V/_D4e";
+    private static final String symmetricSecret = "?c=RmC4[N<J'_H:B";
     private static final int DURATION = 36;
 
     private SecretKeySpec symmetricSecretKey;
@@ -56,7 +57,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
         configureAnimation();
 
         try {
-            this.symmetricSecretKey = new SecretKeySpec(symmetricSecret.getBytes("UTF-8"), "AES");
+            this.symmetricSecretKey = new SecretKeySpec(symmetricSecret.getBytes(StandardCharsets.UTF_8), "AES");
             this.cipher = Cipher.getInstance("AES");
 
             btnSeed.setOnClickListener(v -> {
@@ -98,7 +99,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
                 btnSeed.setVisibility(VISIBLE);
                 circleDisplay.setVisibility(GONE);
             }
-        } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
@@ -134,7 +135,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
         circleDisplay.showValue(DURATION, DURATION, true);
     }
 
-    public String encryptFile(byte[] data)
+    private String encryptFile(byte[] data)
             throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         this.cipher.init(Cipher.ENCRYPT_MODE, this.symmetricSecretKey);
         return Base64.encodeToString(this.cipher.doFinal(data), Base64.NO_WRAP);
@@ -142,7 +143,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @android.support.annotation.NonNull @NonNull String permissions[], @android.support.annotation.NonNull @NonNull int[] grantResults) {
     }
 
     @Override

@@ -3,7 +3,7 @@ package br.com.poc.otp.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JsonUtils {
+class JsonUtils {
 
     private static Gson gsonInstance;
 

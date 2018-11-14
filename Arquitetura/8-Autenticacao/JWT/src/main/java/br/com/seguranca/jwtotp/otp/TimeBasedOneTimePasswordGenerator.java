@@ -1,12 +1,11 @@
-package br.com.poc.otp.otp;
+package br.com.seguranca.jwtotp.otp;
 
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 
 /**
  * <p>Generates time-based one-time passwords (TOTP) as specified in
@@ -70,7 +69,7 @@ class TimeBasedOneTimePasswordGenerator extends HmacOneTimePasswordGenerator {
      * @throws NoSuchAlgorithmException if the underlying JRE doesn't support the
      * happen except in cases of serious misconfiguration
      */
-    public TimeBasedOneTimePasswordGenerator(final long timeStep, final TimeUnit timeStepUnit, final int passwordLength) throws NoSuchAlgorithmException {
+    TimeBasedOneTimePasswordGenerator(final long timeStep, final TimeUnit timeStepUnit, final int passwordLength) throws NoSuchAlgorithmException {
         this(timeStep, timeStepUnit, passwordLength, TOTP_ALGORITHM_HMAC_SHA256);
     }
 
@@ -82,7 +81,7 @@ class TimeBasedOneTimePasswordGenerator extends HmacOneTimePasswordGenerator {
      * @param timeStepUnit the units for the the given time step
      * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
      * 6 and 8, inclusive
-     * @param algorithm the name of the {@link javax.crypto.Mac} algorithm to use when generating passwords; TOTP allows
+     * @param algorithm the name of the {@link Mac} algorithm to use when generating passwords; TOTP allows
      */
     private TimeBasedOneTimePasswordGenerator(final long timeStep, final TimeUnit timeStepUnit, final int passwordLength, final String algorithm) throws NoSuchAlgorithmException {
         super(passwordLength, algorithm);
@@ -101,7 +100,7 @@ class TimeBasedOneTimePasswordGenerator extends HmacOneTimePasswordGenerator {
      *
      * @throws InvalidKeyException if the given key is inappropriate for initializing the {@link Mac} for this generator
      */
-    public String generateOneTimePassword(final SecretKey secretKey, final Date timestamp) throws InvalidKeyException {
+    String generateOneTimePassword(final SecretKey secretKey, final Date timestamp) throws InvalidKeyException {
         return this.generateOneTimePassword(secretKey, timestamp.getTime() / this.timeStepMillis);
     }
 

@@ -1,14 +1,7 @@
 package br.com.seguranca.jwtotp.configuration;
 
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Collections;
-
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import br.com.seguranca.jwtotp.dto.LoginDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,11 +9,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.FilterChain;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Collections;
 
-public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    protected JWTLoginFilter(String url, AuthenticationManager authManager) {
+    JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
     }

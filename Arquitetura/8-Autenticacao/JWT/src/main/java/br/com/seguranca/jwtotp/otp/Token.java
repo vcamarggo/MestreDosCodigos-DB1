@@ -1,10 +1,12 @@
-package br.com.poc.otp.otp;
+package br.com.seguranca.jwtotp.otp;
 
 public class Token {
     private final String currentToken;
     private final String nextToken;
 
-    public Token(String currentToken, String nextToken) {
+    Token(String currentToken, String nextToken) {
+        System.out.println("Current " + currentToken);
+        System.out.println("Next " + nextToken);
         this.currentToken = currentToken;
         this.nextToken = nextToken;
     }

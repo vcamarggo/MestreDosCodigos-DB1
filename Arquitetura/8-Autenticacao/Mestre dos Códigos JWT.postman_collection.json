@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "3bf0aec1-8e1d-44c2-b8c8-fcc5e278e14e",
+		"name": "Mestre dos Códigos JWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LOGIN-ADMIN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "433b121c-e03d-4563-97c8-aeb3c3479b5c",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.authorization);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"account\":\"111222\",\"password\":\"MTIzNDU2\"}"
+				},
+				"url": {
+					"raw": "localhost:8080/banking/acessar",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banking",
+						"acessar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VALIDA-TRANSACAO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "433b121c-e03d-4563-97c8-aeb3c3479b5c",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":118237,\"account\":\"111222\",\"otp\":\"076184\"}"
+				},
+				"url": {
+					"raw": "localhost:8080/banking/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banking",
+						"transacao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGIN-USER",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a02dfebf-2406-4bd3-af71-38aed8dec231",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.authorization);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"account\":\"999000\",\"password\":\"MDk4NzY1\"}"
+				},
+				"url": {
+					"raw": "localhost:8080/banking/acessar",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banking",
+						"acessar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Existe token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/banking/semente/existe-ativa?account=111222",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banking",
+						"semente",
+						"existe-ativa"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "111222"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CADASTRAR-SEMENTE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a02dfebf-2406-4bd3-af71-38aed8dec231",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"account\":\"111222\",\"seed\":\"LoHlWnqjhCUHMyDujwOsrw==\"}"
+				},
+				"url": {
+					"raw": "localhost:8080/banking/semente",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banking",
+						"semente"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

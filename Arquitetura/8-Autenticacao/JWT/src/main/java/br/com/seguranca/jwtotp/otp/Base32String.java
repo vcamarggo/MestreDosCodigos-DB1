@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.com.poc.otp.otp;
+package br.com.seguranca.jwtotp.otp;
 
 /**
  * Encodes arbitrary byte arrays as case-insensitive base-32 strings.
@@ -24,7 +24,6 @@ package br.com.poc.otp.otp;
  * taken into account. The result is that multiple strings decode to the same
  * byte array, for example, string of sixteen 7s ("7...7") and seventeen 7s both
  * decode to the same byte array.
- * TODO(sarvar): Revisit this encoding and whether this ambiguity needs fixing.
  *
  * @author sweis@google.com (Steve Weis)
  * @author Neal Gafter
@@ -34,6 +33,11 @@ class Base32String {
 
     private static final Base32String INSTANCE =
             new Base32String(); // RFC 4648/3548
+
+    private static Base32String getInstance() {
+        return INSTANCE;
+    }
+
     private final char[] DIGITS;
     private final int MASK;
     private final int SHIFT;
@@ -45,9 +49,6 @@ class Base32String {
         SHIFT = Integer.numberOfTrailingZeros(DIGITS.length);
     }
 
-    private static Base32String getInstance() {
-        return INSTANCE;
-    }
 
     static String encode(byte[] data) {
         return getInstance().encodeInternal(data);

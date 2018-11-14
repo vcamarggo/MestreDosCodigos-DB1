@@ -1,13 +1,10 @@
-package br.com.poc.otp.otp;
-
-import android.util.Log;
-
-import java.nio.ByteBuffer;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+package br.com.seguranca.jwtotp.otp;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
+import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * <p>Generates HMAC-based one-time passwords (HOTP) as specified in
@@ -15,7 +12,6 @@ import javax.crypto.SecretKey;
  *
  * <p>{@code HmacOneTimePasswordGenerator} instances are thread-safe and may be shared and re-used across multiple
  * threads.</p>
- *
  */
 class HmacOneTimePasswordGenerator {
     private final String algorithm;
@@ -54,7 +50,7 @@ class HmacOneTimePasswordGenerator {
      *
      * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
      *                       6 and 8, inclusive
-     * @param algorithm      the name of the {@link javax.crypto.Mac} algorithm to use when generating passwords; note that
+     * @param algorithm      the name of the {@link Mac} algorithm to use when generating passwords; note that
      *                       standards like TOTP may allow for other algorithms
      * @throws NoSuchAlgorithmException if the given algorithm is not supported by the underlying JRE
      */
@@ -124,9 +120,6 @@ class HmacOneTimePasswordGenerator {
         while (result.length() != DEFAULT_PASSWORD_LENGTH) {
             result.insert(0, "0");
         }
-
-        if (String.valueOf(hotp % this.modDivisor).length() != 6)
-            Log.e("TKN", result.toString());
 
         return result.toString();
     }

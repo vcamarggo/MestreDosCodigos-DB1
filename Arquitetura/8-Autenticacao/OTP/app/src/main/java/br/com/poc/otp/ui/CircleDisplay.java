@@ -25,71 +25,106 @@ import java.text.DecimalFormat;
 /**
  * Simple custom-view for displaying values (with and without animation) and
  * selecting values onTouch().
- * 
+ *
  * @author Philipp Jahoda
  */
 @SuppressLint("NewApi")
 public class CircleDisplay extends View implements OnGestureListener {
 
+    /**
+     * paint used for drawing the text
+     */
+    public static final int PAINT_TEXT = 1;
+    /**
+     * paint representing the value bar
+     */
+    public static final int PAINT_ARC = 2;
+    /**
+     * paint representing the inner (by default white) area
+     */
+    public static final int PAINT_INNER = 3;
     private static final String LOG_TAG = "CircleDisplay";
-
-    /** the unit that is represented by the circle-display */
+    /**
+     * the unit that is represented by the circle-display
+     */
     private String mUnit = "%";
-
-    /** startangle of the view */
+    /**
+     * startangle of the view
+     */
     private float mStartAngle = 270f;
-
     /**
      * field representing the minimum selectable value in the display - the
      * minimum interval
      */
     private float mStepSize = 1f;
-
-    /** angle that represents the displayed value */
+    /**
+     * angle that represents the displayed value
+     */
     private float mAngle = 0f;
-
-    /** current state of the animation */
+    /**
+     * current state of the animation
+     */
     private float mPhase = 0f;
-
-    /** the currently displayed value, can be percent or actual value */
+    /**
+     * the currently displayed value, can be percent or actual value
+     */
     private float mValue = 0f;
-
-    /** the maximum displayable value, depends on the set value */
+    /**
+     * the maximum displayable value, depends on the set value
+     */
     private float mMaxValue = 0f;
-
-    /** percent of the maximum width the arc takes */
+    /**
+     * percent of the maximum width the arc takes
+     */
     private float mValueWidthPercent = 50f;
-
-    /** if enabled, the inner circle is drawn */
+    /**
+     * if enabled, the inner circle is drawn
+     */
     private boolean mDrawInner = true;
-
-    /** if enabled, the center text is drawn */
+    /**
+     * if enabled, the center text is drawn
+     */
     private boolean mDrawText = true;
-
-    /** if enabled, touching and therefore selecting values is enabled */
+    /**
+     * if enabled, touching and therefore selecting values is enabled
+     */
     private boolean mTouchEnabled = true;
-
-    /** represents the alpha value used for the remainder bar */
+    /**
+     * represents the alpha value used for the remainder bar
+     */
     private int mDimAlpha = 80;
-
-    /** the decimalformat responsible for formatting the values in the view */
+    /**
+     * the decimalformat responsible for formatting the values in the view
+     */
     private DecimalFormat mFormatValue = new DecimalFormat("###,###,###,##0.0");
-
-    /** array that contains values for the custom-text */
+    /**
+     * array that contains values for the custom-text
+     */
     private String[] mCustomText = null;
-
     /**
      * rect object that represents the bounds of the view, needed for drawing
      * the circle
      */
     private RectF mCircleBox = new RectF();
-
     private Paint mArcPaint;
     private Paint mInnerCirclePaint;
     private Paint mTextPaint;
-
-    /** object animator for doing the drawing animations */
+    /**
+     * object animator for doing the drawing animations
+     */
     private ObjectAnimator mDrawAnimator;
+    /**
+     * boolean flag that indicates if the box has been setup
+     */
+    private boolean mBoxSetup = false;
+    /**
+     * listener called when a value has been selected on touch
+     */
+    private SelectionListener mListener;
+    /**
+     * gesturedetector for recognizing single-taps
+     */
+    private GestureDetector mGestureDetector;
 
     public CircleDisplay(Context context) {
         super(context);
@@ -130,9 +165,6 @@ public class CircleDisplay extends View implements OnGestureListener {
         mGestureDetector = new GestureDetector(getContext(), this);
     }
 
-    /** boolean flag that indicates if the box has been setup */
-    private boolean mBoxSetup = false;
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -150,7 +182,7 @@ public class CircleDisplay extends View implements OnGestureListener {
             drawInnerCircle(canvas);
 
         if (mDrawText) {
-            
+
             if (mCustomText != null)
                 drawCustomText(canvas);
             else
@@ -160,7 +192,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * draws the text in the center of the view
-     * 
+     *
      * @param c
      */
     private void drawText(Canvas c) {
@@ -170,24 +202,24 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * draws the custom text in the center of the view
-     * 
+     *
      * @param c
      */
     private void drawCustomText(Canvas c) {
-        
+
         int index = (int) ((mValue * mPhase) / mStepSize);
-        
-        if(index < mCustomText.length) {
+
+        if (index < mCustomText.length) {
             c.drawText(mCustomText[index], getWidth() / 2,
                     getHeight() / 2 + mTextPaint.descent(), mTextPaint);
         } else {
             Log.e(LOG_TAG, "Custom text array not long enough.");
-        }        
+        }
     }
 
     /**
      * draws the background circle with less alpha
-     * 
+     *
      * @param c
      */
     private void drawWholeCircle(Canvas c) {
@@ -200,7 +232,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * draws the inner circle of the view
-     * 
+     *
      * @param c
      */
     private void drawInnerCircle(Canvas c) {
@@ -211,7 +243,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * draws the actual value slice/arc
-     * 
+     *
      * @param c
      */
     private void drawValue(Canvas c) {
@@ -242,7 +274,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * shows the given value in the circle view
-     * 
+     *
      * @param toShow
      * @param total
      * @param animated
@@ -265,7 +297,7 @@ public class CircleDisplay extends View implements OnGestureListener {
      * Sets the unit that is displayed next to the value in the center of the
      * view. Default "%". Could be "€" or "$" or left blank or whatever it is
      * you display.
-     * 
+     *
      * @param unit
      */
     public void setUnit(String unit) {
@@ -275,21 +307,21 @@ public class CircleDisplay extends View implements OnGestureListener {
     /**
      * Returns the currently displayed value from the view. Depending on the
      * used method to show the value, this value can be percent or actual value.
-     * 
+     *
      * @return
      */
     public float getValue() {
         return mValue;
     }
 
-    public void startAnim() {
+    private void startAnim() {
         mPhase = 0f;
         mDrawAnimator.start();
     }
 
     /**
      * set the duration of the drawing animation in milliseconds
-     * 
+     *
      * @param durationmillis
      */
     public void setAnimDuration(int durationmillis) {
@@ -298,16 +330,16 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns the diameter of the drawn circle/arc
-     * 
+     *
      * @return
      */
-    public float getDiameter() {
+    private float getDiameter() {
         return Math.min(getWidth(), getHeight());
     }
 
     /**
      * returns the radius of the drawn circle
-     * 
+     *
      * @return
      */
     public float getRadius() {
@@ -316,7 +348,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * calculates the needed angle for a given value
-     * 
+     *
      * @param percent
      * @return
      */
@@ -326,7 +358,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set the starting angle for the view
-     * 
+     *
      * @param angle
      */
     public void setStartAngle(float angle) {
@@ -335,7 +367,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns the current animation status of the view
-     * 
+     *
      * @return
      */
     public float getPhase() {
@@ -344,7 +376,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * DONT USE THIS METHOD
-     * 
+     *
      * @param phase
      */
     public void setPhase(float phase) {
@@ -354,7 +386,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set this to true to draw the inner circle, default: true
-     * 
+     *
      * @param enabled
      */
     public void setDrawInnerCircle(boolean enabled) {
@@ -363,7 +395,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns true if drawing the inner circle is enabled, false if not
-     * 
+     *
      * @return
      */
     public boolean isDrawInnerCircleEnabled() {
@@ -372,7 +404,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set the drawing of the center text to be enabled or not
-     * 
+     *
      * @param enabled
      */
     public void setDrawText(boolean enabled) {
@@ -381,7 +413,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns true if drawing the text in the center is enabled
-     * 
+     *
      * @return
      */
     public boolean isDrawTextEnabled() {
@@ -390,7 +422,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set the color of the arc
-     * 
+     *
      * @param color
      */
     public void setColor(int color) {
@@ -399,7 +431,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set the size of the center text in dp
-     * 
+     *
      * @param size
      */
     public void setTextSize(float size) {
@@ -408,7 +440,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * set the thickness of the value bar, default 50%
-     * 
+     *
      * @param percentFromTotalWidth
      */
     public void setValueWidthPercent(float percentFromTotalWidth) {
@@ -419,7 +451,7 @@ public class CircleDisplay extends View implements OnGestureListener {
      * Set an array of custom texts to be drawn instead of the value in the
      * center of the CircleDisplay. If set to null, the custom text will be
      * reset and the value will be drawn. Make sure the length of the array corresponds with the maximum number of steps (set with setStepSize(float stepsize).
-     * 
+     *
      * @param custom
      */
     public void setCustomText(String[] custom) {
@@ -428,12 +460,12 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * sets the number of digits used to format values
-     * 
+     *
      * @param digits
      */
     public void setFormatDigits(int digits) {
 
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (int i = 0; i < digits; i++) {
             if (i == 0)
                 b.append(".");
@@ -446,26 +478,17 @@ public class CircleDisplay extends View implements OnGestureListener {
     /**
      * set the aplha value to be used for the remainder of the arc, default 80
      * (use value between 0 and 255)
-     * 
+     *
      * @param alpha
      */
     public void setDimAlpha(int alpha) {
         mDimAlpha = alpha;
     }
 
-    /** paint used for drawing the text */
-    public static final int PAINT_TEXT = 1;
-
-    /** paint representing the value bar */
-    public static final int PAINT_ARC = 2;
-
-    /** paint representing the inner (by default white) area */
-    public static final int PAINT_INNER = 3;
-
     /**
      * sets the given paint object to be used instead of the original/default
      * one
-     * 
+     *
      * @param which, e.g. CircleDisplay.PAINT_TEXT to set a new text paint
      * @param p
      */
@@ -485,21 +508,8 @@ public class CircleDisplay extends View implements OnGestureListener {
     }
 
     /**
-     * Sets the stepsize (minimum selection interval) of the circle display,
-     * default 1f. It is recommended to make this value not higher than 1/5 of
-     * the maximum selectable value, and not lower than 1/200 of the maximum
-     * selectable value. For a maximum value of 100 for example, a stepsize
-     * between 0.5 and 20 is recommended.
-     * 
-     * @param stepsize
-     */
-    public void setStepSize(float stepsize) {
-        mStepSize = stepsize;
-    }
-
-    /**
      * returns the current stepsize of the display, default 1f
-     * 
+     *
      * @return
      */
     public float getStepSize() {
@@ -507,8 +517,21 @@ public class CircleDisplay extends View implements OnGestureListener {
     }
 
     /**
+     * Sets the stepsize (minimum selection interval) of the circle display,
+     * default 1f. It is recommended to make this value not higher than 1/5 of
+     * the maximum selectable value, and not lower than 1/200 of the maximum
+     * selectable value. For a maximum value of 100 for example, a stepsize
+     * between 0.5 and 20 is recommended.
+     *
+     * @param stepsize
+     */
+    public void setStepSize(float stepsize) {
+        mStepSize = stepsize;
+    }
+
+    /**
      * returns the center point of the view in pixels
-     * 
+     *
      * @return
      */
     public PointF getCenter() {
@@ -516,20 +539,8 @@ public class CircleDisplay extends View implements OnGestureListener {
     }
 
     /**
-     * Enable touch gestures on the circle-display. If enabled, selecting values
-     * onTouch() is possible. Set a SelectionListener to retrieve selected
-     * values. Do not forget to set a value before selecting values. By default
-     * the maxvalue is 0f and therefore nothing can be selected.
-     * 
-     * @param enabled
-     */
-    public void setTouchEnabled(boolean enabled) {
-        mTouchEnabled = enabled;
-    }
-
-    /**
      * returns true if touch-gestures are enabled, false if not
-     * 
+     *
      * @return
      */
     public boolean isTouchEnabled() {
@@ -537,20 +548,26 @@ public class CircleDisplay extends View implements OnGestureListener {
     }
 
     /**
+     * Enable touch gestures on the circle-display. If enabled, selecting values
+     * onTouch() is possible. Set a SelectionListener to retrieve selected
+     * values. Do not forget to set a value before selecting values. By default
+     * the maxvalue is 0f and therefore nothing can be selected.
+     *
+     * @param enabled
+     */
+    public void setTouchEnabled(boolean enabled) {
+        mTouchEnabled = enabled;
+    }
+
+    /**
      * set a selection listener for the circle-display that is called whenever a
      * value is selected onTouch()
-     * 
+     *
      * @param l
      */
     public void setSelectionListener(SelectionListener l) {
         mListener = l;
     }
-
-    /** listener called when a value has been selected on touch */
-    private SelectionListener mListener;
-
-    /** gesturedetector for recognizing single-taps */
-    private GestureDetector mGestureDetector;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -577,10 +594,10 @@ public class CircleDisplay extends View implements OnGestureListener {
 
                 switch (e.getAction()) {
 
-                // case MotionEvent.ACTION_DOWN:
-                // if (mListener != null)
-                // mListener.onSelectionStarted(mValue, mMaxValue);
-                // break;
+                    // case MotionEvent.ACTION_DOWN:
+                    // if (mListener != null)
+                    // mListener.onSelectionStarted(mValue, mMaxValue);
+                    // break;
                     case MotionEvent.ACTION_MOVE:
 
                         updateValue(x, y);
@@ -596,15 +613,14 @@ public class CircleDisplay extends View implements OnGestureListener {
             }
 
             return true;
-        }
-        else
+        } else
             return super.onTouchEvent(e);
     }
 
     /**
      * updates the display with the given touch position, takes stepsize into
      * consideration
-     * 
+     *
      * @param x
      * @param y
      */
@@ -662,7 +678,7 @@ public class CircleDisplay extends View implements OnGestureListener {
     /**
      * returns the angle relative to the view center for the given point on the
      * chart in degrees. The angle is always between 0 and 360°, 0° is NORTH
-     * 
+     *
      * @param x
      * @param y
      * @return
@@ -691,7 +707,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns the angle representing the given value
-     * 
+     *
      * @param value
      * @return
      */
@@ -701,7 +717,7 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     /**
      * returns the value representing the given angle
-     * 
+     *
      * @param angle
      * @return
      */
@@ -712,7 +728,7 @@ public class CircleDisplay extends View implements OnGestureListener {
     /**
      * returns the distance of a certain point on the view to the center of the
      * view
-     * 
+     *
      * @param x
      * @param y
      * @return
@@ -723,8 +739,8 @@ public class CircleDisplay extends View implements OnGestureListener {
 
         float dist = 0f;
 
-        float xDist = 0f;
-        float yDist = 0f;
+        float xDist;
+        float yDist;
 
         if (x > c.x) {
             xDist = x - c.x;
@@ -746,48 +762,6 @@ public class CircleDisplay extends View implements OnGestureListener {
 
     public ObjectAnimator getmDrawAnimator() {
         return mDrawAnimator;
-    }
-
-    /**
-     * listener for callbacks when selecting values ontouch
-     * 
-     * @author Philipp Jahoda
-     */
-    public interface SelectionListener {
-
-        /**
-         * called everytime the user moves the finger on the circle-display
-         * 
-         * @param val
-         * @param maxval
-         */
-        public void onSelectionUpdate(float val, float maxval);
-
-        /**
-         * called when the user releases his finger fromt he circle-display
-         * 
-         * @param val
-         * @param maxval
-         */
-        public void onValueSelected(float val, float maxval);
-    }
-
-    public static abstract class Utils {
-
-        /**
-         * This method converts dp unit to equivalent pixels, depending on
-         * device density.
-         * 
-         * @param dp A value in dp (density independent pixels) unit. Which we
-         *            need to convert into pixels
-         * @return A float value to represent px equivalent to dp depending on
-         *         device density
-         */
-        public static float convertDpToPixel(Resources r, float dp) {
-            DisplayMetrics metrics = r.getDisplayMetrics();
-            float px = dp * (metrics.densityDpi / 160f);
-            return px;
-        }
     }
 
     @Override
@@ -818,6 +792,47 @@ public class CircleDisplay extends View implements OnGestureListener {
     public void onShowPress(MotionEvent e) {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * listener for callbacks when selecting values ontouch
+     *
+     * @author Philipp Jahoda
+     */
+    public interface SelectionListener {
+
+        /**
+         * called everytime the user moves the finger on the circle-display
+         *
+         * @param val
+         * @param maxval
+         */
+        void onSelectionUpdate(float val, float maxval);
+
+        /**
+         * called when the user releases his finger fromt he circle-display
+         *
+         * @param val
+         * @param maxval
+         */
+        void onValueSelected(float val, float maxval);
+    }
+
+    static abstract class Utils {
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on
+         * device density.
+         *
+         * @param dp A value in dp (density independent pixels) unit. Which we
+         *           need to convert into pixels
+         * @return A float value to represent px equivalent to dp depending on
+         * device density
+         */
+        static float convertDpToPixel(Resources r, float dp) {
+            DisplayMetrics metrics = r.getDisplayMetrics();
+            return dp * (metrics.densityDpi / 160f);
+        }
     }
 
 }
