@@ -62,4 +62,14 @@ Arquitetura/4-InjecaoDependencias-2-Cache/target/
 !Arquitetura/5-Rx/*
 !Arquitetura/8-Autenticacao/OTP/*
 !Arquitetura/8-Autenticacao/OTP/gradle/*
+!Arquitetura/8-Autenticacao/OTP/app/*
+!Arquitetura/8-Autenticacao/OTP/app/src/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/values/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/layout/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/drawable/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/drawable-nodpi/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/drawable-v24/*
+!Arquitetura/8-Autenticacao/OTP/app/src/main/res/mipmap-anydpi-v26/*
 !Arquitetura/8-Autenticacao/JWT/*
