@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
             WebModule
                     .create(IUserService.class)
-                    .doLogin(account, password)
+                    .doLogin(new LoginDto(account, password))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(

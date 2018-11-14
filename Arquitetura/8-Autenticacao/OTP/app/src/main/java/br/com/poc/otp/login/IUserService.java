@@ -14,13 +14,13 @@ import retrofit2.http.Query;
  */
 public interface IUserService {
 
-    @GET("http://localhost:8080/banking/acessar")
-    Single<TokenDto> doLogin(@Query("account") String account, @Query("password") String password);
+    @POST("http://192.168.0.100:8080/banking/acessar")
+    Single<TokenDto> doLogin(@Body LoginDto loginDto);
 
-    @GET("http://localhost:8080/banking/semente/existe-ativa")
+    @GET("http://192.168.0.100:8080/banking/semente/existe-ativa")
     Completable hasToken(@Query("account") String accountId);
 
-    @POST("http://localhost:8080/banking/semente")
+    @POST("http://192.168.0.100:8080/banking/semente")
     Completable sendSeed(@Body SeedBody seedBody);
 
 }

@@ -32,8 +32,7 @@
         android:layout_below="@id/til_account"
         android:layout_centerInParent="true"
         android:layout_marginTop="32dp"
-        android:theme="@style/TextInputLayoutWhite"
-        android:visibility="gone">
+        android:theme="@style/TextInputLayoutWhite" >
 
         <br.com.poc.otp.ui.CustomEditText
             android:id="@+id/et_password"
