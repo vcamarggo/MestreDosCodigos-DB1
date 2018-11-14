@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">OTP</string>
+    <string name="agencia">Agência</string>
+    <string name="conta">Conta</string>
+    <string name="gerar_password">Gerar Password</string>
+    <string name="envia_semente">Criar Token</string>
+    <string name="receber_semente">Criar Token</string>
+    <string name="validate_password">Validar token</string>
+    <string name="validate">Validar dados</string>
+    <string name="senha">Senha</string>
+    <string name="token">TOKEN %s</string>
+    <string name="logar">Logar</string>
+    <string name="msg_sending">Sincronizando semente</string>
+</resources>
