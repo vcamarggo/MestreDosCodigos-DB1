@@ -12,12 +12,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    //Configura a segurança da aplicação
+    //POST liberado em urls de login e h2 (BD para depuração)
+    // apenas ADMIN pode fazer operação com semente
+    // caso haja requisição de login, esta é tratada com o filtro correto
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/banking/acessar", "/h2-console/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/h2-console/*").permitAll()
                 .antMatchers("/banking/semente/*").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/banking/semente").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 // filtra requisições de login
@@ -29,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable();
     }
 
+    // "Cadastra" usuários default
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()

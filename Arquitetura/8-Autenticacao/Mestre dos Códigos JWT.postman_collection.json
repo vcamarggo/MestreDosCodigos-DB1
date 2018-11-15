@@ -77,13 +77,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEyMjIiLCJyb2xlcyI6IkFETUlOIiwiZXhwIjoxNTQyMjMyMjg5fQ.NxLcorKtfM9KLFeI5gJreBnau-rA6aZdv5Bi8T9MLgvE8jVnIJwE7QGjgozka5VcLS3qT7XqDXs_PdFoNOYEWw",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"id\":118237,\"account\":\"111222\",\"otp\":\"076184\"}"
+					"raw": "{\"id\":118237,\"account\":\"111222\",\"otp\":\"996607\"}"
 				},
 				"url": {
 					"raw": "localhost:8080/banking/transacao",

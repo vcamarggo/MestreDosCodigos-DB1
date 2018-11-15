@@ -30,6 +30,7 @@ class TokenAuthenticationService {
     private static final String ROLES = "roles";
     private static final String ROLE_PREFIX = "ROLE_";
 
+    //Configura JWT com corpo + permissao
     static void addAuthentication(HttpServletResponse response, Authentication authentication) throws IOException {
         String role = authentication.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElseThrow(IOException::new);
         String jwtBody = Jwts.builder()
@@ -46,6 +47,7 @@ class TokenAuthenticationService {
         response.getWriter().write(new Gson().toJson(token));
     }
 
+    //Valida o JWT de uma requisição
     static Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
 

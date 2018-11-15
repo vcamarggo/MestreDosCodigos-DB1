@@ -9,10 +9,6 @@ import android.view.MotionEvent;
 
 import br.com.poc.otp.R;
 
-/**
- * Created by bruno.trovo on 08/08/2017.
- */
-
 public class CustomEditText extends TextInputEditText {
 
     private static final int X_DEFAULT_RIGHT = 70;

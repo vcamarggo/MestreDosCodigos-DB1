@@ -12,12 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 class JWTAuthenticationFilter extends GenericFilterBean {
-
-    public void doFilter(ServletRequest request,
-                         ServletResponse response,
-                         FilterChain filterChain
-        ) throws IOException, ServletException {
-
+    //Filtra as chamadas na aplicação e valida a autenticação JWT
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         Authentication authentication = TokenAuthenticationService.getAuthentication((HttpServletRequest) request);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

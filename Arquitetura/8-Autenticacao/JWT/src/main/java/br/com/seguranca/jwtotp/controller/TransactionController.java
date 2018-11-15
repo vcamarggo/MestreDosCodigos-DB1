@@ -26,6 +26,7 @@ public class TransactionController {
 
     private static final String symmetricSecret = "?c=RmC4[N<J'_H:B";
 
+    //Valida uma transação via OTP
     @PostMapping
     public ResponseEntity validateTransaction(@RequestBody TransactionDTO transactionDTO) throws Exception {
         Optional<SeedDTO> seedDTO = seedRepository.findById(transactionDTO.getAccount());

@@ -13,11 +13,13 @@ public class SeedController {
     @Autowired
     SeedRepository seedRepository;
 
+    //Valida se já há semente para uma determinada conta
     @GetMapping(value = "/existe-ativa")
     public ResponseEntity hasSeed(@RequestParam("account") String account) {
         return seedRepository.findById(account).isPresent() ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
     }
 
+    //Cria semente para uma determinada conta
     @PostMapping
     public ResponseEntity createSeed(@RequestBody SeedDTO seedDTO) {
         seedRepository.save(seedDTO);

@@ -1,6 +1,7 @@
 package br.com.poc.otp.otp;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -23,11 +24,13 @@ import javax.crypto.spec.SecretKeySpec;
 import br.com.poc.otp.PreferencesHelper;
 import br.com.poc.otp.R;
 import br.com.poc.otp.login.IUserService;
+import br.com.poc.otp.login.LoginActivity;
 import br.com.poc.otp.service.WebModule;
 import br.com.poc.otp.ui.CircleDisplay;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -75,6 +78,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
                                 Toast.makeText(this, "Token gerado com sucesso!", Toast.LENGTH_LONG).show();
                                 PreferencesHelper.saveBooleanPreference(this, HAS_TOKEN, true);
                                 PreferencesHelper.saveLongPreference(this, SEED, seed);
+                                generatePassword();
                             }, throwable -> Toast.makeText(this, "Houve um erro ao processar sua solicitação!", Toast.LENGTH_LONG).show());
                 } catch (Exception ignored) {
                 }
@@ -110,7 +114,7 @@ public class GenerateOTPActivity extends AppCompatActivity {
         circleDisplay.setStepSize(10);
         circleDisplay.setFormatDigits(0);
         circleDisplay.setUnit("s");
-        circleDisplay.setColor(getResources().getColor(R.color.red));
+        circleDisplay.setColor(getResources().getColor(R.color.colorAccent));
     }
 
     private void controlAnimation() {
@@ -160,9 +164,14 @@ public class GenerateOTPActivity extends AppCompatActivity {
                     tvContent.setVisibility(VISIBLE);
                     generatePassword();
                 }, throwable -> {
-                    btnSeed.setVisibility(VISIBLE);
-                    circleDisplay.setVisibility(GONE);
-                    tvContent.setVisibility(GONE);
+                    if (throwable instanceof HttpException && ((((HttpException) throwable).code() == 403) || ((HttpException) throwable).code() == 500)) {
+                        PreferencesHelper.removeStringPreference(this,HAS_TOKEN);
+                        startActivity(new Intent(this, LoginActivity.class));
+                    } else {
+                        btnSeed.setVisibility(VISIBLE);
+                        circleDisplay.setVisibility(GONE);
+                        tvContent.setVisibility(GONE);
+                    }
                 });
     }
 }

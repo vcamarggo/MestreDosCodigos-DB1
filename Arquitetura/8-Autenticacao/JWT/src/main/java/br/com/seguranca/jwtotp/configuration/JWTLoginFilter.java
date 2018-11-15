@@ -23,9 +23,9 @@ class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         setAuthenticationManager(authManager);
     }
 
+    //Valida os dados da tentativa de login
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
 
         LoginDTO credentials = new ObjectMapper()
                 .readValue(request.getInputStream(), LoginDTO.class);
@@ -40,12 +40,7 @@ class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     }
 
     @Override
-    protected void successfulAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain,
-            Authentication auth) throws IOException {
-
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication auth) throws IOException {
         TokenAuthenticationService.addAuthentication(response, auth);
     }
 

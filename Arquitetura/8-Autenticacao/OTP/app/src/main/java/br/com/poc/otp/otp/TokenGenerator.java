@@ -21,7 +21,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-
+/**
+ * Created by vinicius.camargo on 04/10/2018
+ */
 class TokenGenerator {
 
     private final SecretKeyGeneratorService secretKeyGenerator;

@@ -1,5 +1,7 @@
 package br.com.poc.otp.otp;
-
+/**
+ * Created by vinicius.camargo on 04/10/2018
+ */
 public class Token {
     private final String currentToken;
     private final String nextToken;
