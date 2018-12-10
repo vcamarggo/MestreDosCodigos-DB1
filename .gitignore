@@ -60,6 +60,11 @@ settings.gradle
 TODO.txt
 Arquitetura/4-InjecaoDependencias-2-Cache/target/
 !Arquitetura/5-Rx/*
+!Arquitetura/5-Rx/gradle/*
+!Arquitetura/5-Rx/gradle/*
+!Arquitetura/5-Rx/gradle/wrapper/*
+!Arquitetura/5-Rx/gradle/wrapper/gradle-wrapper.properties
+!Arquitetura/5-Rx/gradle/wrapper/gradle-wrapper.jar
 !Arquitetura/8-Autenticacao/OTP/*
 !Arquitetura/8-Autenticacao/OTP/gradle/*
 !Arquitetura/8-Autenticacao/OTP/app/*
